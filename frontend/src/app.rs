@@ -1,10 +1,17 @@
 use types::DirResponse;
 use yew::prelude::*;
+use yew_router::prelude::*;
 use reqwasm::http::Request;
 
 
-#[function_component(App)]
-pub fn app() -> Html {
+#[derive(Clone, Routable, PartialEq)]
+enum Route {
+    #[at("/")]
+    Home,
+}
+
+#[function_component(Home)]
+fn home() -> Html {
     let backend_url: String = "http://localhost:8082".to_string();
     let response = Box::new(use_state(|| None));
     let error = Box::new(use_state(|| None));
@@ -65,11 +72,21 @@ pub fn app() -> Html {
             }
         },
     }
+}
 
-    // html! {
-    //     <main>
-    //         <h1>{ "File server on Rust" }</h1>
-    //         <span class="subtitle">{ "from Yew with " }<i class="heart" /></span>
-    //     </main>
-    // }
+fn switch(routes: &Route) -> Html {
+    match routes {
+        Route::Home => html! {
+            <Home />
+        }
+    }
+}
+
+#[function_component(App)]
+pub fn app() -> Html {
+    html! {
+        <BrowserRouter>
+            <Switch<Route> render={Switch::render(switch)} />
+        </BrowserRouter>
+    }
 }
