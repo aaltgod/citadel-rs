@@ -1,5 +1,6 @@
 use types::DirResponse;
 use yew::prelude::*;
+use yew::Component;
 use yew_router::prelude::*;
 use reqwasm::http::Request;
 
@@ -8,6 +9,43 @@ use reqwasm::http::Request;
 enum Route {
     #[at("/")]
     Home,
+}
+
+pub enum Msg {
+    AddOne,
+}
+
+pub struct Model {
+    value: i64,
+}
+
+impl Component for Model {
+    type Message = Msg;
+    type Properties = ();
+
+    fn create(ctx: &Context<Self>) -> Self {
+        Self {
+            value: 0
+         }
+    }
+
+    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
+        match msg {
+            Msg::AddOne => {
+                self.value += 1;
+                true
+            }
+        }
+    }
+
+    fn view(&self, ctx: &Context<Self>) -> Html {
+        html! {
+            <div>
+                <button onclick={ctx.link().callback(|_| Msg::AddOne)}>{ "+1" }</button>
+                <p>{ self.value }</p>
+            </div>
+        }
+    }
 }
 
 #[function_component(Home)]
@@ -77,7 +115,9 @@ fn home() -> Html {
 fn switch(routes: &Route) -> Html {
     match routes {
         Route::Home => html! {
-            <Home />
+            <main>
+                <h1>{ "Hello World" }</h1>
+            </main>
         }
     }
 }

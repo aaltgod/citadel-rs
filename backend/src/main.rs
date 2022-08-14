@@ -1,5 +1,7 @@
 use actix_cors::Cors;
 
+use actix_files::Files;
+
 use actix_web::{
     get, post,
     web::{self, Json},
@@ -32,9 +34,9 @@ async fn main() -> std::io::Result<()> {
             .allowed_origin(allowed_origin.as_str())
             .allowed_methods(vec!["GET"]);
         
-        App::new().wrap(cors)
-            .service(home)
+        App::new()
             .service(get_root)
+            .service(Files::new("/", "./static").index_file("index.html"))
     })
     .bind(("localhost", 8082))?
     .run()
