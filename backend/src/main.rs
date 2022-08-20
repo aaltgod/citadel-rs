@@ -28,7 +28,6 @@ async fn get_root() -> Json<DirResponse> {
 async fn main() -> std::io::Result<()> {
     let allowed_origin: String = "http://127.0.0.1:8080".to_string();
     
-
     HttpServer::new(move || {
         let cors = Cors::default()
             .allowed_origin(allowed_origin.as_str())
