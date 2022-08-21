@@ -1,7 +1,6 @@
-mod app;
-
-use app::Model;
+use frontend::app::App;
 
 fn main() {
-    yew::start_app::<Model>();  
+    yew::start_app::<App>();  
 }
+

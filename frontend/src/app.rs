@@ -3,12 +3,17 @@ use yew::prelude::*;
 use yew::Component;
 use yew_router::prelude::*;
 use reqwasm::http::Request;
+use stylist::yew::Global;
 
+use crate::header::Header;
+use crate::pages::HomePage;
 
-#[derive(Clone, Routable, PartialEq)]
-enum Route {
+#[derive(Routable, Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Route {
     #[at("/")]
     Home,
+    #[at("/upload")]
+    Upload
 }
 
 pub enum Msg {
@@ -39,6 +44,8 @@ impl Component for Model {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
+        let link = ctx.link();
+
         html! {
             <div>
                 <button onclick={ctx.link().callback(|_| Msg::AddOne)}>{ "+1" }</button>
@@ -114,19 +121,22 @@ fn home() -> Html {
 
 fn switch(routes: &Route) -> Html {
     match routes {
-        Route::Home => html! {
-            <main>
-                <h1>{ "Hello World" }</h1>
-            </main>
-        }
+        Route::Home => html! {<HomePage />},
+        Route::Upload => html! {}
     }
 }
 
 #[function_component(App)]
 pub fn app() -> Html {
     html! {
-        <BrowserRouter>
-            <Switch<Route> render={Switch::render(switch)} />
-        </BrowserRouter>
+        <>
+        <Global css="" />
+            <BrowserRouter>
+                <main>
+                    <Header />
+                    <Switch<Route> render={Switch::render(switch)} />
+                </main>
+            </BrowserRouter>
+        </>
     }
 }
