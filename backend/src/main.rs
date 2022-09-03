@@ -26,6 +26,8 @@ async fn get_root() -> Json<DirResponse> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+
     let allowed_origin: String = "http://localhost:8082".to_string();
     
     HttpServer::new(move || {
@@ -33,7 +35,7 @@ async fn main() -> std::io::Result<()> {
             .allowed_origin(allowed_origin.as_str());
         
         App::new()
-            .wrap(Logger::default().log_target("@"))
+            .wrap(Logger::default().log_target("http_log"))
             .wrap(cors)
             .service(get_root)
             .service(
