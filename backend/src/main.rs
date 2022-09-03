@@ -4,6 +4,7 @@ use actix_web::{
     web::{self, Json},
     HttpResponse, HttpServer,
     Responder, App,
+    middleware::Logger,
 };
 use actix_web_lab::web::spa;
 
@@ -32,6 +33,7 @@ async fn main() -> std::io::Result<()> {
             .allowed_origin(allowed_origin.as_str());
         
         App::new()
+            .wrap(Logger::default().log_target("@"))
             .wrap(cors)
             .service(get_root)
             .service(
