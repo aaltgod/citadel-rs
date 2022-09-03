@@ -17,13 +17,12 @@ pub fn view() -> Html {
             flex: 1;
             border: 1px solid;
             border-raduis: 2px;
-            border-color: rgba(0,0,0,0.7);
+            border-color: #8CA6DB;
             background: rgba(0,0,0,0.7);
             padding: 5px;
             margin: 10px;
             width: 200px;
             height: 250px;
-            clickable: true;
         "#
     );
 

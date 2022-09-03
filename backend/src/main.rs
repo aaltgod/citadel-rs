@@ -1,13 +1,12 @@
 use actix_cors::Cors;
-
-use actix_files::Files;
-
 use actix_web::{
     get, post,
     web::{self, Json},
     HttpResponse, HttpServer,
     Responder, App,
 };
+use actix_web_lab::web::spa;
+
 use types::DirResponse;
 
 
@@ -35,7 +34,13 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors)
             .service(get_root)
-            .service(Files::new("/", "./static").index_file("index.html"))
+            .service(
+                spa()
+                .index_file("./static/index.html")
+                .static_resources_mount("/")
+                .static_resources_location("./static")
+                .finish()
+            )
     })
     .bind(("localhost", 8082))?
     .run()
