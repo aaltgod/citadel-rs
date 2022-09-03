@@ -1,5 +1,6 @@
-use serde::{Deserialize, Serialize};
+pub mod config;
 
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[serde(rename_all = "camelCase")]

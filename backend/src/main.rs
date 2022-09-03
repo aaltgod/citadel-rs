@@ -1,3 +1,5 @@
+use std::{fs, env::set_var};
+
 use actix_cors::Cors;
 use actix_web::{
     get, post,
@@ -8,7 +10,10 @@ use actix_web::{
 };
 use actix_web_lab::web::spa;
 
-use types::DirResponse;
+use common::{
+    config::{Config, CONFIG_FILENAME},
+    DirResponse,
+};
 
 
 #[get("/")]
@@ -26,17 +31,15 @@ async fn get_root() -> Json<DirResponse> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+    let config_string = fs::read_to_string("../".to_string()+CONFIG_FILENAME)?;
+    let config: Config = toml::from_str(&config_string)?;
 
-    let allowed_origin: String = "http://localhost:8082".to_string();
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("INFO"));
     
-    HttpServer::new(move || {
-        let cors = Cors::default()
-            .allowed_origin(allowed_origin.as_str());
-        
+    
+    HttpServer::new(move || {    
         App::new()
             .wrap(Logger::default().log_target("http_log"))
-            .wrap(cors)
             .service(get_root)
             .service(
                 spa()
@@ -46,7 +49,7 @@ async fn main() -> std::io::Result<()> {
                 .finish()
             )
     })
-    .bind(("localhost", 8082))?
+    .bind((config.server.address, config.server.port))?
     .run()
     .await
 }

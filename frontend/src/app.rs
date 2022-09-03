@@ -1,4 +1,4 @@
-use types::DirResponse;
+use common::DirResponse;
 use yew::prelude::*;
 use yew::Component;
 use yew_router::prelude::*;
